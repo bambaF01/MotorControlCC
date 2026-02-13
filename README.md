@@ -74,6 +74,4 @@ Si besoin, forcer le port:
 ```bash
 python3 enregistrement/log_moteur.py --port /dev/ttyACM0 --baud 9600
 ```
-# MotorControlCC
-# MotorControlCC
-# MotorControlCC
+
