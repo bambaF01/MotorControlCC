@@ -58,11 +58,13 @@ def main():
 
     logging = False
     out_handle = None
-    pattern = re.compile(r"^\s*([+-]?\d+(?:\.\d+)?),\s*([+-]?\d+(?:\.\d+)?),\s*([+-]?\d+(?:\.\d+)?)\s*$")
-    plotter_pattern = re.compile(r"rpm:\s*([+-]?\d+(?:\.\d+)?)\s+cons:\s*([+-]?\d+(?:\.\d+)?)")
-    plotter_pwm_pattern = re.compile(r"rpm:\s*([+-]?\d+(?:\.\d+)?)\s+pwm:\s*([+-]?\d+(?:\.\d+)?)")
+    csv_pattern = re.compile(r"^\s*([+-]?\d+(?:\.\d+)?),\s*([+-]?\d+(?:\.\d+)?),\s*([+-]?\d+(?:\.\d+)?)\s*$")
+    plotter_pid_pattern = re.compile(r"rpm:\s*([+-]?\d+(?:\.\d+)?)\s+cons:\s*([+-]?\d+(?:\.\d+)?)")
+    plotter_bo_pattern = re.compile(r"rpm:\s*([+-]?\d+(?:\.\d+)?)\s+pwm:\s*([+-]?\d+(?:\.\d+)?)")
     monitor_start = time.time()
     cmd_queue = queue.Queue()
+    mode = None  # 'PID' ou 'BO'
+    csv_header = "t_ms,rpm,cons"
 
     def stdin_reader():
         while True:
@@ -91,10 +93,10 @@ def main():
                 if line == "CSV_START":
                     if not logging:
                         out_handle = open(out, "w", encoding="utf-8")
-                        out_handle.write("t_ms,rpm,cons\n")
+                        out_handle.write(csv_header + "\n")
                         start_time = time.time()
                         logging = True
-                        print("Enregistrement demarre.")
+                        print(f"Enregistrement demarre en mode {mode if mode else 'inconnu'}")
                     continue
 
                 if line == "CSV_END":
@@ -108,23 +110,30 @@ def main():
                     continue
 
                 if logging:
-                    m = pattern.match(line)
+                    m = csv_pattern.match(line)
                     if m and out_handle:
-                        out_handle.write(f"{m.group(1)},{m.group(2)},{m.group(3)}\n")
+                        t_ms = int((time.time() - start_time) * 1000)
+                        out_handle.write(f"{t_ms},{m.group(1)},{m.group(2)}\n")
                     else:
                         # Afficher les messages de statut (ex: gains) sans polluer le CSV
                         print(line)
                 else:
-                    # Avant CSV_START, affiche simplement les messages
-                    mplot = plotter_pattern.search(line)
-                    if mplot:
+                    # Avant CSV_START, détecter le mode et afficher les messages
+                    mplot_pid = plotter_pid_pattern.search(line)
+                    if mplot_pid:
+                        if not mode:
+                            mode = "PID"
+                            csv_header = "t_ms,rpm,cons"
                         t_ms = int((time.time() - monitor_start) * 1000)
-                        #print(f"rpm:{mplot.group(1)} cons:{mplot.group(2)} tMs:{t_ms}")
+                        print(f"Mode PID detecte - rpm:{mplot_pid.group(1)} cons:{mplot_pid.group(2)}")
                     else:
-                        mplot_pwm = plotter_pwm_pattern.search(line)
-                        if mplot_pwm:
+                        mplot_bo = plotter_bo_pattern.search(line)
+                        if mplot_bo:
+                            if not mode:
+                                mode = "BO"
+                                csv_header = "t_ms,rpm,pwm"
                             t_ms = int((time.time() - monitor_start) * 1000)
-                            #print(f"rpm:{mplot_pwm.group(1)} pwm:{mplot_pwm.group(2)} tMs:{t_ms}")
+                            print(f"Mode BO detecte - rpm:{mplot_bo.group(1)} pwm:{mplot_bo.group(2)}")
                         else:
                             print(line)
         except KeyboardInterrupt:
