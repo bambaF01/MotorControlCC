@@ -162,6 +162,8 @@ Pour un moteur DC avec encodeur :
 - **Réponse rapide** : Kp=0.8, Ki=0.05, Kd=0.02
 - **Stabilité maximale** : Kp=0.3, Ki=0.02, Kd=0.01
 
+![Illustration du PID](PID.png)
+
 ### Conseils pratiques
 
 - Observer la réponse sur le Serial Plotter d'Arduino
