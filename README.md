@@ -91,8 +91,6 @@ Consigne → [PID] → PWM → Moteur → Vitesse → Mesure → [PID]
                ↑___________________________|
 ```
 
-![Illustration du PID](PID.png)
-
 **Avantages :**
 - Maintient la vitesse malgré les variations de charge
 - Réponse rapide et précise
@@ -161,6 +159,8 @@ Pour un moteur DC avec encodeur :
 - **Démarrage** : Kp=0.2, Ki=0.01, Kd=0.005
 - **Réponse rapide** : Kp=0.8, Ki=0.05, Kd=0.02
 - **Stabilité maximale** : Kp=0.3, Ki=0.02, Kd=0.01
+
+![Illustration du PID](PID.png)
 
 ### Conseils pratiques
 
