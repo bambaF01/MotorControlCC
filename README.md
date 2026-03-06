@@ -91,8 +91,6 @@ Consigne → [PID] → PWM → Moteur → Vitesse → Mesure → [PID]
                ↑___________________________|
 ```
 
-![Illustration du PID](PID.png)
-
 **Avantages :**
 - Maintient la vitesse malgré les variations de charge
 - Réponse rapide et précise
@@ -145,6 +143,8 @@ g
 kp0.5    # Kp = 0.5
 ki0.01   # Ki = 0.01  
 kd0.02   # Kd = 0.02
+
+![Illustration du PID](PID.png)
 
 # Ajustements fins
 kp+      # Augmenter Kp de 0.01
