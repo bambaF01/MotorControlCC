@@ -91,6 +91,8 @@ Consigne → [PID] → PWM → Moteur → Vitesse → Mesure → [PID]
                ↑___________________________|
 ```
 
+![Illustration du PID](PID.png)
+
 **Avantages :**
 - Maintient la vitesse malgré les variations de charge
 - Réponse rapide et précise
