@@ -173,8 +173,8 @@ class MotorUI:
 
         log_box = ttk.LabelFrame(controls, text="Enregistrement")
         log_box.pack(side=tk.LEFT, fill=tk.Y, padx=(12, 0))
-        ttk.Button(log_box, text="Demarrer CSV", command=self._start_logging).pack(side=tk.TOP, pady=(4, 2))
-        ttk.Button(log_box, text="Arreter CSV", command=self._stop_logging).pack(side=tk.TOP, pady=(2, 4))
+        ttk.Button(log_box, text="Sauvegarder", command=self._start_logging).pack(side=tk.TOP, pady=(4, 2))
+        ttk.Button(log_box, text="Arreter", command=self._stop_logging).pack(side=tk.TOP, pady=(2, 4))
         self.log_status_var = tk.StringVar(value="Inactif")
         ttk.Label(log_box, textvariable=self.log_status_var).pack(side=tk.TOP, pady=(4, 2))
 
