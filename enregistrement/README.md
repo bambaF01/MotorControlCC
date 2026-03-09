@@ -1,6 +1,6 @@
 # Enregistrement moteur
 
-Script Python pour logger les mesures série d'un Arduino (PID ou boucle ouverte) dans un CSV.
+Script Python pour logger les mesures du moteur (PID ou boucle ouverte) dans un CSV.
 
 ## Prérequis
 
@@ -40,7 +40,7 @@ python3 ui_moteur.py --port /dev/ttyACM0 --baud 9600
 
 ## Fonctionnement de l'UI
 
-- Connexion serie : saisir le port, cliquer sur **Detecter** puis **Connecter**.
+- Connexion : saisir le port, cliquer sur **Detecter** puis **Connecter**.
 - Mode : l'UI detecte automatiquement si le firmware envoie `rpm:... cons:...` (PID) ou `rpm:... pwm:...` (boucle ouverte).
 - Commandes disponibles :
   - **Consigne (rpm)** : envoie `vXXX`
@@ -51,13 +51,9 @@ python3 ui_moteur.py --port /dev/ttyACM0 --baud 9600
 - Courbe temps reel : affiche `rpm` + consigne/PWM selon le mode detecte.
 - Enregistrement CSV local : boutons **Demarrer CSV** / **Arreter CSV** avec fichiers dans ce dossier au format `moteur_YYYYMMDD_HHMMSS.csv`.
 
-## Fonctionnement
+## Fonctionnement du logger
 
-- Le script détecte automatiquement un port série (avec préférence pour l'Arduino Due).
-- Il détecte automatiquement le mode de fonctionnement :
-  - **PID** : `rpm:<val> cons:<val>`
-  - **Boucle ouverte** : `rpm:<val> pwm:<val>`
-- Il écoute les sorties série et peut enregistrer un CSV lorsque l'Arduino envoie `CSV_START` puis `CSV_END`.
+- Le script peut enregistrer un CSV lorsque le firmware envoie `CSV_START` puis `CSV_END`.
 - Les lignes CSV attendues sont au format `t_ms,rpm,cons` (PID) ou `t_ms,rpm,pwm` (BO).
 
 ## Concepts théoriques

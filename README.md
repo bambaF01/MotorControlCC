@@ -1,12 +1,12 @@
 # motor-PID
 
-Projet Arduino pour piloter un moteur DC avec encodeur en boucle ouverte et en PID sur Arduino Due, avec un script Python pour logger les mesures série.
+Projet Arduino pour piloter un moteur DC avec encodeur en boucle ouverte et en PID sur Arduino Due.
 
 ## Structure
 
 - `moteurs_PID/moteurs_PID.ino` : PID vitesse pour 1 moteur + 1 encodeur (Arduino Due).
 - `moteurs_BO/moteurs_open_loop/moteurs_open_loop.ino` : boucle ouverte (Arduino Due).
-- `enregistrement/log_moteur.py` : logger serie vers CSV.
+- `enregistrement/log_moteur.py` : logger vers CSV.
 - `enregistrement/README.md` : détails du logger.
 
 ## Matériel / Câblage
@@ -16,19 +16,16 @@ Ce projet est calibré pour un driver DRV8871 en mode XOR et un encodeur 2 voies
 - Encodeur : A sur D2 (INT0), B sur D7.
 - Driver DRV8871 en mode XOR : PWM1 sur D9, PWM2 sur D6.
 
-## Carte et port série
+## Carte et port
 
-- Arduino Due supporte `Serial` (port programmation) et `SerialUSB` (port natif).
-- Dans les `.ino`, la variable `USE_SERIAL_USB` permet de choisir le port.
+- Arduino Due.
 - PWM sur Due est en 12 bits: `PWM_MAX = 4095`.
 
 ## Utilisation rapide (PID)
 
 1. Ouvrir l'un des `.ino` dans l'IDE Arduino.
 2. Sélectionner la carte Arduino Due et téléverser.
-3. Ouvrir le moniteur série à 9600 bauds.
-4. Envoyer `h` pour l'aide.
-5. (Optionnel) Lancer le logger :
+3. (Optionnel) Lancer le logger :
 
 ```bash
 python3 enregistrement/log_moteur.py
@@ -62,40 +59,23 @@ macOS (Homebrew) : `brew install python-tk`
 python3 enregistrement/ui_moteur.py
 ```
 
-6. Si besoin, forcer le port serie :
+6. Si besoin, forcer le port :
 
 ```bash
 python3 enregistrement/ui_moteur.py --port /dev/ttyACM0 --baud 9600
 ```
 
 Notes :
-- Windows : le port ressemble a `COM3`, `COM4`, etc.
 - Windows : utiliser `python` au lieu de `python3` si besoin.
-- Linux : le port ressemble a `/dev/ttyACM0` ou `/dev/ttyUSB0`.
-- Pour acces serie sous Linux, ajouter l'utilisateur au groupe `dialout` puis se reconnecter.
 
 ## Utilisation rapide (boucle ouverte)
 
 1. Téléverser `moteurs_BO/moteurs_open_loop/moteurs_open_loop.ino`.
-2. Ouvrir le moniteur série à 9600 bauds.
-3. Envoyer `p120` par exemple pour fixer le PWM.
-4. Utiliser `s` pour stopper.
+2. Lancer l'exemple et verifier le comportement moteur.
 
-## Commandes série (détail)
+## Commandes
 
-PID (`moteurs_PID/moteurs_PID.ino`) :
-
-- `h` ou `help` : affiche l'aide.
-- `vXXX` : consigne vitesse en RPM (ex: `v120`).
-- `s` : stop moteur.
-- `kpX`, `kiX`, `kdX` : set gains (ex: `kp0.12`).
-- `kp+`, `kp-`, `ki+`, `ki-`, `kd+`, `kd-` : ajuste les gains.
-- `g` : affiche Kp/Ki/Kd.
-
-Boucle ouverte (`moteurs_BO/moteurs_open_loop/moteurs_open_loop.ino`) :
-
-- `pXXX` : consigne PWM (0..PWM_MAX).
-- `s` : stop moteur.
+Les commandes de controle sont disponibles directement dans l'UI.
 
 ## Concepts théoriques
 
@@ -173,27 +153,7 @@ Le régulateur PID nécessite un réglage fin des trois paramètres (gains) pour
    - Commencer avec Kd = 0.001
    - Augmenter pour réduire les oscillations et améliorer le temps de réponse
 
-### Commandes de réglage série
-
-```bash
-# Afficher les gains actuels
-g
-
-# Régler directement les gains
-kp0.5    # Kp = 0.5
-ki0.01   # Ki = 0.01  
-kd0.02   # Kd = 0.02
-
-[Illustration du PID](PID.png)
-
-# Ajustements fins
-kp+      # Augmenter Kp de 0.01
-kp-      # Diminuer Kp de 0.01
-ki+      # Augmenter Ki de 0.001
-ki-      # Diminuer Ki de 0.001
-kd+      # Augmenter Kd de 0.001
-kd-      # Diminuer Kd de 0.001
-```
+![Illustration du PID](PID.png)
 
 ### Points de départ recommandés
 
@@ -206,23 +166,17 @@ Pour un moteur DC avec encodeur :
 
 ### Conseils pratiques
 
-- Observer la réponse sur le Serial Plotter d'Arduino
+- Observer la réponse sur la courbe de l'UI
 - Viser une réponse rapide avec un dépassement < 20%
 - Éviter les oscillations continues
 - Tester avec différentes charges pour valider la robustesse
 - Sauvegarder les gains optimaux dans le code Arduino
 
-## Sorties série attendues
-
-- PID : `rpm:<val> cons:<val>` (pour Serial Plotter).
-- Boucle ouverte : `rpm:<val> pwm:<val>` (pour Serial Plotter).
-
-## Logger série
+## Logger
 
 Le script `enregistrement/log_moteur.py` :
-- Détecte automatiquement un port série (avec préférence pour Arduino Due).
 - Peut enregistrer un CSV quand le firmware envoie `CSV_START` puis `CSV_END`.
-- Sinon il affiche simplement les messages série.
+- Sinon il affiche simplement les messages.
 
 Si besoin, forcer le port :
 
