@@ -34,6 +34,53 @@ Ce projet est calibré pour un driver DRV8871 en mode XOR et un encodeur 2 voies
 python3 enregistrement/log_moteur.py
 ```
 
+## Interface utilisateur (UI)
+
+### Fonctionnement de l'application
+
+- Connexion serie : saisir le port, cliquer sur **Detecter** puis **Connecter**.
+- Mode : l'UI detecte automatiquement si le firmware envoie `rpm:... cons:...` (PID) ou `rpm:... pwm:...` (boucle ouverte).
+- Commandes disponibles :
+  - **Consigne (rpm)** : envoie `vXXX`
+  - **PWM** : envoie `pXXX`
+  - **Kp/Ki/Kd** : envoie `kpX`, `kiX`, `kdX` (ou via les boutons +/-)
+  - **Stop** : envoie `s`
+  - **Lire gains** : envoie `g` et met a jour les champs Kp/Ki/Kd
+- Courbe temps reel : affiche `rpm` + consigne/PWM selon le mode detecte.
+- Enregistrement CSV local : boutons **Demarrer CSV** / **Arreter CSV** avec fichiers dans `enregistrement/` au format `moteur_YYYYMMDD_HHMMSS.csv`.
+
+## Installation et lancement de l'UI sur un autre ordinateur
+
+1. Telecharger ou cloner le projet.
+2. Installer Python 3.
+3. Installer les dependances Python :
+
+```bash
+python3 -m pip install -r enregistrement/requirements.txt
+```
+
+4. Si l'UI ne demarre pas (Tkinter manquant), installer :
+Linux (Debian/Ubuntu) : `sudo apt install python3-tk`
+macOS (Homebrew) : `brew install python-tk`
+
+5. Lancer l'application :
+
+```bash
+python3 enregistrement/ui_moteur.py
+```
+
+6. Si besoin, forcer le port serie :
+
+```bash
+python3 enregistrement/ui_moteur.py --port /dev/ttyACM0 --baud 9600
+```
+
+Notes :
+- Windows : le port ressemble a `COM3`, `COM4`, etc.
+- Windows : utiliser `python` au lieu de `python3` si besoin.
+- Linux : le port ressemble a `/dev/ttyACM0` ou `/dev/ttyUSB0`.
+- Pour acces serie sous Linux, ajouter l'utilisateur au groupe `dialout` puis se reconnecter.
+
 ## Utilisation rapide (boucle ouverte)
 
 1. Téléverser `moteurs_BO/moteurs_open_loop/moteurs_open_loop.ino`.
@@ -144,6 +191,8 @@ kp0.5    # Kp = 0.5
 ki0.01   # Ki = 0.01  
 kd0.02   # Kd = 0.02
 
+[Illustration du PID](PID.png)
+
 # Ajustements fins
 kp+      # Augmenter Kp de 0.01
 kp-      # Diminuer Kp de 0.01
@@ -187,4 +236,3 @@ Si besoin, forcer le port :
 ```bash
 python3 enregistrement/log_moteur.py --port /dev/ttyACM0 --baud 9600
 ```
-

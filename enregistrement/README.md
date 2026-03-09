@@ -5,10 +5,11 @@ Script Python pour logger les mesures série d'un Arduino (PID ou boucle ouverte
 ## Prérequis
 
 - Python 3
-- `pyserial` :
+- `pyserial`
+- `matplotlib`
 
 ```bash
-python3 -m pip install pyserial
+python3 -m pip install -r requirements.txt
 ```
 
 ## Utilisation
@@ -19,11 +20,36 @@ Depuis ce dossier :
 python3 log_moteur.py
 ```
 
+Interface UI (pilotage + courbes) :
+
+```bash
+python3 ui_moteur.py
+```
+
 Options utiles :
 
 ```bash
 python3 log_moteur.py --port /dev/ttyACM0 --baud 9600
 ```
+
+Options utiles (UI) :
+
+```bash
+python3 ui_moteur.py --port /dev/ttyACM0 --baud 9600
+```
+
+## Fonctionnement de l'UI
+
+- Connexion serie : saisir le port, cliquer sur **Detecter** puis **Connecter**.
+- Mode : l'UI detecte automatiquement si le firmware envoie `rpm:... cons:...` (PID) ou `rpm:... pwm:...` (boucle ouverte).
+- Commandes disponibles :
+  - **Consigne (rpm)** : envoie `vXXX`
+  - **PWM** : envoie `pXXX`
+  - **Kp/Ki/Kd** : envoie `kpX`, `kiX`, `kdX` (ou via les boutons +/-)
+  - **Stop** : envoie `s`
+  - **Lire gains** : envoie `g` et met a jour les champs Kp/Ki/Kd
+- Courbe temps reel : affiche `rpm` + consigne/PWM selon le mode detecte.
+- Enregistrement CSV local : boutons **Demarrer CSV** / **Arreter CSV** avec fichiers dans ce dossier au format `moteur_YYYYMMDD_HHMMSS.csv`.
 
 ## Fonctionnement
 
