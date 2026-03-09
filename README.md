@@ -39,7 +39,7 @@ python3 enregistrement/log_moteur.py
 - La courbe affiche la vitesse mesuree et, selon le mode, la consigne.
 - Enregistrement CSV local : boutons **Demarrer CSV** / **Arreter CSV** avec fichiers dans `enregistrement/` au format `moteur_YYYYMMDD_HHMMSS.csv`.
 
-## Installation et lancement de l'UI sur un autre ordinateur
+## Installation et lancement de l'UI
 
 1. Telecharger ou cloner le projet.
 2. Installer Python 3.
