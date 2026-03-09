@@ -373,16 +373,20 @@ class MotorUI:
         aux = [s.aux for s in self.data]
 
         self.rpm_line.set_data(xs, rpm)
-        self.aux_line.set_data(xs, aux)
-
         mode = self._current_mode()
         if mode == "pid":
+            self.aux_line.set_data(xs, aux)
+            self.aux_line.set_visible(True)
             self.aux_line.set_label("consigne")
             self.ax.set_ylabel("RPM / Consigne")
         elif mode == "bo":
-            self.aux_line.set_label("pwm")
-            self.ax.set_ylabel("RPM / PWM")
+            self.aux_line.set_data([], [])
+            self.aux_line.set_visible(False)
+            self.aux_line.set_label("_nolegend_")
+            self.ax.set_ylabel("RPM")
         else:
+            self.aux_line.set_data(xs, aux)
+            self.aux_line.set_visible(True)
             self.aux_line.set_label("consigne/pwm")
             self.ax.set_ylabel("RPM / Consigne/PWM")
         self.ax.legend(loc="upper right")

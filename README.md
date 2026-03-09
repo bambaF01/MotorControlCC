@@ -38,15 +38,8 @@ python3 enregistrement/log_moteur.py
 
 ### Fonctionnement de l'application
 
-- Connexion serie : saisir le port, cliquer sur **Detecter** puis **Connecter**.
-- Mode : l'UI detecte automatiquement si le firmware envoie `rpm:... cons:...` (PID) ou `rpm:... pwm:...` (boucle ouverte).
-- Commandes disponibles :
-  - **Consigne (rpm)** : envoie `vXXX`
-  - **PWM** : envoie `pXXX`
-  - **Kp/Ki/Kd** : envoie `kpX`, `kiX`, `kdX` (ou via les boutons +/-)
-  - **Stop** : envoie `s`
-  - **Lire gains** : envoie `g` et met a jour les champs Kp/Ki/Kd
-- Courbe temps reel : affiche `rpm` + consigne/PWM selon le mode detecte.
+- L'interface permet de piloter les valeurs (consigne RPM, PWM, gains PID) et d'afficher la courbe en temps reel.
+- La courbe affiche la vitesse mesuree et, selon le mode, la consigne.
 - Enregistrement CSV local : boutons **Demarrer CSV** / **Arreter CSV** avec fichiers dans `enregistrement/` au format `moteur_YYYYMMDD_HHMMSS.csv`.
 
 ## Installation et lancement de l'UI sur un autre ordinateur
