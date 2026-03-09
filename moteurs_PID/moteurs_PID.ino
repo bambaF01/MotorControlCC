@@ -23,7 +23,7 @@ const int encB = 7; // B
 // FIT0450 : 11 impulsions / tour moteur (sur A en RISING)
 const int ENC_CPR = 11;
 
-const unsigned long periodeMesure = 100; // ms
+const unsigned long periodeMesure = 20; // ms
 const int MAX_RPM = 60;
 
 volatile long count = 0;

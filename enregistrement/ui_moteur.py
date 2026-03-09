@@ -22,6 +22,7 @@ from matplotlib.figure import Figure
 BAUD = 9600
 OUT_PREFIX = "moteur_"
 OUT_DIR = Path(__file__).resolve().parent
+SAMPLE_PERIOD_MS = 20
 
 
 PID_PATTERN = re.compile(r"rpm:\s*([+-]?\d+(?:\.\d+)?)\s+cons:\s*([+-]?\d+(?:\.\d+)?)")
@@ -106,6 +107,7 @@ class MotorUI:
         self.log_start_time = None
         self.log_path = None
         self.log_header = None
+        self.log_sample_count = 0
 
         self.ser = None
         self.reader_thread = None
@@ -360,10 +362,9 @@ class MotorUI:
         t = time.time() - self.start_time
         self.data.append(Sample(t=t, rpm=rpm, aux=aux))
         if self.logging and self.log_handle:
-            if self.log_start_time is None:
-                self.log_start_time = time.time()
-            t_ms = int((time.time() - self.log_start_time) * 1000)
+            t_ms = self.log_sample_count * SAMPLE_PERIOD_MS
             self.log_handle.write(f"{t_ms},{rpm},{aux}\n")
+            self.log_sample_count += 1
 
     def _update_plot(self):
         if not self.data:
@@ -428,6 +429,7 @@ class MotorUI:
         self.log_handle = open(self.log_path, "w", encoding="utf-8")
         self.log_handle.write(self.log_header + "\n")
         self.log_start_time = time.time()
+        self.log_sample_count = 0
         self.logging = True
         self.log_status_var.set(f"Actif: {self.log_path.name}")
 
