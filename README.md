@@ -153,16 +153,12 @@ Le régulateur PID nécessite un réglage fin des trois paramètres (gains) pour
    - Commencer avec Kd = 0.001
    - Augmenter pour réduire les oscillations et améliorer le temps de réponse
 
-![Illustration du PID](PID.png)
-
 ### Points de départ recommandés
 
 Pour un moteur DC avec encodeur :
 - **Démarrage** : Kp=0.2, Ki=0.01, Kd=0.005
 - **Réponse rapide** : Kp=0.8, Ki=0.05, Kd=0.02
 - **Stabilité maximale** : Kp=0.3, Ki=0.02, Kd=0.01
-
-![Illustration du PID](PID.png)
 
 ### Conseils pratiques
 
